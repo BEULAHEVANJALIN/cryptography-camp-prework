@@ -1,0 +1,53 @@
+# ============================
+# Rust
+# ============================
+/target/
+**/*.rs.bk
+Cargo.lock
+*.rlib
+*.dSYM/
+
+# Rust test output
+/tests/output.log
+
+# ============================
+# Python
+# ============================
+__pycache__/
+/python/__pycache__/
+/python/*.pyc
+*.pyo
+*.pyd
+*.pyc
+*.log
+
+# Virtual environments
+venv/
+.python-version
+
+# ============================
+# Test Vectors & Temp
+# ============================
+/test_vectors/*.log
+/test_vectors/*.tmp
+*.swp
+*.bak
+*.tmp
+
+# ============================
+# OS & Editor Junk
+# ============================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# ============================
+# Misc
+# ============================
+.env
+.envrc
+*.egg-info
+
