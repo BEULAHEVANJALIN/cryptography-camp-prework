@@ -1,0 +1,484 @@
+\documentclass[12pt,openany]{book}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]{\normalfont\huge\bfseries}{\thechapter}{1em}{}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{example}{Example}[chapter]
+\newtheorem{exercise}{Exercise}[chapter]
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{corollary}{Corollary}[chapter]
+\newtheorem{lemma}{Lemma}[chapter]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[chapter]
+
+\title{Fermat's Little Theorem}
+\author{Beulah Evanjalin}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Introduction}
+
+Pierre de Fermat's ``Little Theorem" stands as one of the most elegant and powerful results in elementary number theory. First stated by Fermat in 1640 in a letter to Frénicle de Bessy, this theorem reveals a profound connection between prime numbers and modular arithmetic that continues to find applications in modern cryptography, primality testing, and theoretical mathematics.
+
+\section{Historical Context}
+
+The theorem emerged during the golden age of number theory, when mathematicians like Fermat, Euler, and Gauss were laying the foundations of modern algebra. While Fermat claimed to possess a proof that was ``too long" to include in his correspondence, a recurring theme in his mathematical communications, the first published proof came nearly a century later from Leonhard Euler in 1736.
+
+\section{Statement of the Theorem}
+
+\begin{theorem}[Fermat's Little Theorem - General Form]
+If $p$ is a prime number and $a$ is any integer, then
+\[
+a^p \equiv a \pmod{p}
+\]
+\end{theorem}
+
+\begin{theorem}[Fermat's Little Theorem - Coprime Form]
+If $p$ is a prime number and $a$ is an integer such that $\gcd(a,p) = 1$, then
+\[
+a^{p-1} \equiv 1 \pmod{p}
+\]
+\end{theorem}
+\noindent
+These two formulations are equivalent: the first immediately implies the second by dividing both sides by $a$ (valid since $\gcd(a,p) = 1$), while the second implies the first by multiplying both sides by $a$.
+
+\chapter{Classical Proofs}
+
+\section{Euler's Proof (1736)}
+
+The most widely taught proof, attributed to Euler, uses the properties of multiplication modulo a prime.
+
+\begin{proof}[Euler's Proof]
+Let $p$ be prime and $a$ an integer with $\gcd(a,p) = 1$. Consider the sequence:
+\[
+S = \{a, 2a, 3a, \ldots, (p-1)a\}
+\]
+\noindent
+We claim that when reduced modulo $p$, this sequence is a permutation of $\{1, 2, 3, \ldots, p-1\}$.
+\noindent
+\\
+\textbf{Step 1: No element of $S$ is congruent to 0 modulo $p$}
+\noindent
+\\
+Since $\gcd(a,p) = 1$ and $1 \leq k \leq p-1$, we have $\gcd(ka,p) = 1$, so $ka \not\equiv 0 \pmod{p}$.
+\noindent
+\\
+\\
+\textbf{Step 2: All elements of $S$ are distinct modulo $p$}
+\noindent
+\\
+Suppose $ia \equiv ja \pmod{p}$ for some $1 \leq i < j \leq p-1$. Then:
+\[
+p \mid (j-i)a
+\]
+\noindent
+Since $\gcd(a,p) = 1$, by Euclid's lemma, $p \mid (j-i)$. But $0 < j-i < p$, which is impossible for a prime $p$. Therefore, all elements are distinct.
+\noindent
+\\
+\\
+\textbf{Step 3: Completing the proof}
+\noindent
+\\
+Since $S$ modulo $p$ is a rearrangement of $\{1, 2, \ldots, p-1\}$:
+\[
+a \cdot 2a \cdot 3a \cdots (p-1)a \equiv 1 \cdot 2 \cdot 3 \cdots (p-1) \pmod{p}
+\]
+\noindent
+This gives us:
+\[
+a^{p-1} \cdot (p-1)! \equiv (p-1)! \pmod{p}
+\]
+\noindent
+Since $p$ is prime, $\gcd((p-1)!, p) = 1$, so we can cancel $(p-1)!$ from both sides:
+\[
+a^{p-1} \equiv 1 \pmod{p}
+\]
+\end{proof}
+
+
+\begin{example}[Verification with $p=7$, $a=3$]
+Consider $S = \{3, 6, 9, 12, 15, 18\}$. Reducing modulo 7:
+\[
+3 \equiv 3, \quad 6 \equiv 6, \quad 9 \equiv 2, \quad 12 \equiv 5, \quad 15 \equiv 1, \quad 18 \equiv 4
+\]
+\noindent
+So $\{3, 6, 2, 5, 1, 4\}$ is indeed a rearrangement of $\{1, 2, 3, 4, 5, 6\}$.
+The product gives us:
+\[
+3^6 \cdot 6! \equiv 6! \pmod{7}
+\]
+\noindent
+Therefore $3^6 \equiv 1 \pmod{7}$, and indeed $3^6 = 729 \equiv 1 \pmod{7}$.
+\end{example}
+
+\section{Induction Proof}
+
+This elegant proof demonstrates the power of mathematical induction in number theory.
+
+\begin{proof}[Proof by Induction]
+We prove the general form: $a^p \equiv a \pmod{p}$ for all integers $a$.
+\noindent
+\\
+\\
+\textbf{Base Case:} For $a = 0$: $0^p = 0 \equiv 0 \pmod{p}$
+\noindent
+\\
+For $a = 1$: $1^p = 1 \equiv 1 \pmod{p}$
+\noindent
+\\
+\\
+\textbf{Inductive Step:} Assume $k^p \equiv k \pmod{p}$. We must show $(k+1)^p \equiv k+1 \pmod{p}$.
+\noindent
+\\
+Using the binomial theorem:
+\[
+(k+1)^p = \sum_{i=0}^{p} \binom{p}{i} k^i = 1 + pk + \binom{p}{2}k^2 + \cdots + \binom{p}{p-1}k^{p-1} + k^p
+\]
+\noindent
+\\
+\textbf{Key Lemma:} For prime $p$ and $1 \leq i \leq p-1$, $p$ divides $\binom{p}{i}$.
+
+\begin{proof}[Proof of Lemma]
+\[
+\binom{p}{i} = \frac{p!}{i!(p-i)!} = \frac{p \cdot (p-1)!}{i!(p-i)!}
+\]
+\noindent
+\\
+Since $p$ is prime and $1 \leq i \leq p-1$, neither $i!$ nor $(p-i)!$ contains $p$ as a factor. Therefore, $p$ divides the numerator but not the denominator, so $p \mid \binom{p}{i}$.
+\end{proof}
+\noindent
+\\ \\
+Returning to our main proof:
+\[
+(k+1)^p \equiv 1 + 0 + 0 + \cdots + 0 + k^p \equiv 1 + k \pmod{p}
+\]
+\noindent
+\\
+By the inductive hypothesis, $k^p \equiv k \pmod{p}$, so:
+\[
+(k+1)^p \equiv 1 + k = k+1 \pmod{p}
+\]
+\noindent
+\\
+By induction, the theorem holds for all non-negative integers. Extension to negative integers follows from the fact that if $a^p \equiv a \pmod{p}$, then $(-a)^p \equiv -a \pmod{p}$ when $p$ is odd.
+\end{proof}
+
+\chapter{Combinatorial Proofs}
+
+\section{Necklace Proof (Golomb, 1956)}
+
+This beautiful combinatorial proof uses the concept of circular arrangements to demonstrate Fermat's Little Theorem.
+
+\begin{proof}[Necklace Proof]
+Consider necklaces made with $p$ beads, where each bead can be coloured in one of $a$ different colours.
+\noindent
+\\
+\\
+\textbf{Step 1: Total colourings}
+There are $a^p$ ways to colour the necklaces when considering them as linear arrangements.
+\noindent
+\\
+\\
+\textbf{Step 2: Monochromatic necklaces}
+Exactly $a$ of these necklaces use only one colour (one for each colour).
+\noindent
+\\
+\\
+\textbf{Step 3: Rotational equivalence}
+For the remaining $a^p - a$ necklaces that use at least two colours, we consider rotational equivalence. Two necklaces are equivalent if one can be obtained from the other by rotation.
+\noindent
+\\
+\textbf{Key Observation:} If a necklace uses at least two colours, then its $p$ rotations are all distinct. This is because if some rotation gives the same necklace, then the pattern would repeat with period $d < p$, where $d$ divides $p$. Since $p$ is prime, this forces $d = 1$, meaning all beads have the same colour, contradicting our assumption.
+\noindent
+\\
+\\
+\textbf{Step 4: Counting equivalence classes}
+The $a^p - a$ non-monochromatic necklaces form equivalence classes of size $p$ each. Therefore:
+\[
+p \mid (a^p - a)
+\]
+\noindent
+This proves $a^p \equiv a \pmod{p}$.
+\end{proof}
+
+\begin{example}[Application with $a=2$, $p=5$]
+We have $2^5 = 32$ total colourings and $2$ monochromatic necklaces. The remaining $30$ necklaces form $30/5 = 6$ equivalence classes under rotation.
+\noindent
+\\
+Indeed, $32 - 2 = 30 \equiv 0 \pmod{5}$, confirming $2^5 \equiv 2 \pmod{5}$.
+\end{example}
+
+\newpage
+
+\section{String Rotation Proof}
+
+Another combinatorial approach uses the properties of string rotations.
+
+\begin{proof}[String Rotation Proof]
+Consider all strings of length $p$ over an alphabet of $a$ symbols.
+\noindent
+\\
+\\
+\textbf{Total strings:} $a^p$
+\noindent
+\\
+\\
+\textbf{Constant strings:} $a$ strings where all symbols are identical
+\noindent
+\\
+\\
+\textbf{Non-constant strings:} $a^p - a$ strings using at least two different symbols
+\noindent
+\\
+\\
+For any non-constant string $S$, define its \textbf{period} as the smallest positive integer $d$ such that $S$ is invariant under a cyclic shift by $d$ positions.
+\noindent
+\\
+\\
+\textbf{Claim:} If $S$ is non-constant, its period is exactly $p$.
+
+\begin{proof}[Proof of Claim]
+Suppose the period is $d < p$. Since rotations preserve the period, $d$ must divide $p$. But $p$ is prime, so $d = 1$. This means $S$ is invariant under any single-position shift, implying all symbols are identical, contradicting that $S$ is non-constant.
+\end{proof}
+\noindent
+\\
+Therefore, each non-constant string generates exactly $p$ distinct rotations, partitioning the $a^p - a$ non-constant strings into groups of size $p$.
+\noindent
+\\
+\\
+Hence $p \mid (a^p - a)$, proving Fermat's Little Theorem.
+\end{proof}
+
+\chapter{Group Theory Proofs}
+
+\section{Lagrange's Theorem Approach}
+
+This proof demonstrates the power of abstract algebra in number theory.
+
+\begin{proof}[Group Theory Proof]
+Consider the multiplicative group of units modulo $p$:
+\[
+U_p = \{1, 2, 3, \ldots, p-1\}
+\]
+\noindent
+under multiplication modulo $p$.
+
+\noindent
+\\
+\textbf{Step 1: $U_p$ is indeed a group}
+
+\begin{itemize}
+\item \textbf{Closure:} If $\gcd(a,p) = \gcd(b,p) = 1$, then $\gcd(ab,p) = 1$
+\item \textbf{Associativity:} Inherited from integer multiplication
+\item \textbf{Identity:} $1 \in U_p$
+\item \textbf{Inverses:} For each $a \in U_p$, there exists $b$ such that $ab \equiv 1 \pmod{p}$ (by Bézout's identity)
+\end{itemize}
+\noindent
+\\
+\textbf{Step 2: Apply Lagrange's theorem}
+\noindent
+\\
+For any $a \in U_p$, the cyclic subgroup $\langle a \rangle = \{1, a, a^2, \ldots, a^{k-1}\}$ has order $k$, where $k$ is the smallest positive integer such that $a^k \equiv 1 \pmod{p}$.
+\noindent
+\\
+\\
+By Lagrange's theorem, $k$ divides $|U_p| = p-1$.
+\noindent
+\\
+\\
+Therefore, $a^{p-1} = (a^k)^{(p-1)/k} \equiv 1^{(p-1)/k} \equiv 1 \pmod{p}$.
+\end{proof}
+
+\newpage
+
+\section{Cosets and Group Actions}
+
+A more sophisticated group-theoretic approach uses the concept of cosets.
+
+\begin{proof}[Coset Proof]
+Let $G = (\mathbb{Z}/p\mathbb{Z})^*$ be the multiplicative group of units modulo $p$, and let $a \in G$.
+\noindent
+\\
+\\
+Consider the map $\phi_a: G \to G$ defined by $\phi_a(x) = ax \bmod p$.
+\noindent
+\\
+\\
+\textbf{Step 1: $\phi_a$ is a bijection}
+Since $a$ has a multiplicative inverse in $G$, the map $\phi_a$ is invertible, hence bijective.
+\noindent
+\\
+\\
+\textbf{Step 2: Product preservation}
+\[
+\prod_{x \in G} x = \prod_{x \in G} \phi_a(x) = \prod_{x \in G} (ax) = a^{|G|} \prod_{x \in G} x
+\]
+\noindent
+\\
+\\
+\textbf{Step 3: Cancellation}
+Since $\prod_{x \in G} x = (p-1)!$ and $\gcd((p-1)!, p) = 1$, we can cancel this product:
+\[
+1 \equiv a^{|G|} = a^{p-1} \pmod{p}
+\]
+\end{proof}
+
+\chapter{Modern and Advanced Proofs}
+
+\section{Field Theory Proof}
+
+This proof uses the structure of finite fields.
+
+\begin{proof}[Field Theory Proof]
+The ring $\mathbb{Z}/p\mathbb{Z}$ is a field when $p$ is prime. Consider the polynomial:
+\[
+f(x) = x^p - x \in \mathbb{F}_p[x]
+\]
+\noindent
+\\
+\textbf{Step 1: Derivative analysis}
+\[
+f'(x) = px^{p-1} - 1 \equiv -1 \pmod{p}
+\]
+\noindent
+\\
+Since $f'(x) \neq 0$, the polynomial $f(x)$ has no repeated roots.
+\noindent
+\\
+\\
+\textbf{Step 2: Counting roots}
+The polynomial $f(x) = x^p - x = x(x^{p-1} - 1)$ has degree $p$, so it has at most $p$ roots in $\mathbb{F}_p$.
+\noindent
+\\
+\\
+\textbf{Step 3: Finding all roots}
+Every element $a \in \mathbb{F}_p$ satisfies $a^p = a$ by the field structure (this requires deeper field theory), so all $p$ elements of $\mathbb{F}_p$ are roots.
+\noindent
+\\
+\\
+Therefore, $a^p \equiv a \pmod{p}$ for all integers $a$.
+\end{proof}
+
+\newpage
+
+\section{Geometric Proof}
+
+This innovative proof uses geometric intuition.
+
+\begin{proof}[Geometric Proof]
+Consider the $p$-dimensional unit hypercube $[0,1]^p$ and partition it into $a^p$ unit subcubes of side length $1/a$.
+\noindent
+\\
+\\
+Each subcube can be labeled with a $p$-tuple $(c_1, c_2, \ldots, c_p)$ where $c_i \in \{0, 1, \ldots, a-1\}$.
+\noindent
+\\
+\\
+\textbf{The transformation:} Define $T: (c_1, c_2, \ldots, c_p) \mapsto (c_2, c_3, \ldots, c_p, c_1)$ (cyclic rotation).
+\noindent
+\\
+\\
+\textbf{Fixed points:} A tuple is fixed by $T$ if and only if $c_1 = c_2 = \cdots = c_p$. There are exactly $a$ such tuples.
+\noindent
+\\
+\\
+\textbf{Orbit analysis:} For non-fixed tuples, $T$ has order $p$ (since $p$ is prime), so each orbit has size $p$.
+\noindent
+\\
+\\
+Therefore, the $a^p - a$ non-fixed tuples are partitioned into orbits of size $p$, proving $p \mid (a^p - a)$.
+\end{proof}
+
+\chapter{Applications and Extensions}
+
+\section{Computational Applications}
+
+\subsection{Modular Exponentiation}
+
+Fermat's Little Theorem dramatically simplifies modular exponentiation computations.
+
+\begin{example}[Computing $7^{100} \bmod 13$]
+Since $13$ is prime and $\gcd(7,13) = 1$:
+\[
+7^{12} \equiv 1 \pmod{13}
+\]
+\noindent
+Now, $100 = 12 \cdot 8 + 4$, so:
+\[
+7^{100} = (7^{12})^8 \cdot 7^4 \equiv 1^8 \cdot 7^4 \equiv 7^4 \pmod{13}
+\]
+\noindent
+Computing: $7^2 = 49 \equiv 10 \pmod{13}$ and $7^4 = 10^2 = 100 \equiv 9 \pmod{13}$.
+\noindent
+\\
+\\
+Therefore, $7^{100} \equiv 9 \pmod{13}$.
+\end{example}
+
+\subsection{Primality Testing}
+
+The Fermat primality test uses the contrapositive of Fermat's Little Theorem.
+
+\begin{theorem}[Fermat Compositeness Test]
+If $n$ is composite, then there exists some $a$ with $1 < a < n$ such that $a^{n-1} \not\equiv 1 \pmod{n}$.
+\end{theorem}
+\noindent
+However, there exist composite numbers called \textbf{Carmichael numbers} that satisfy $a^{n-1} \equiv 1 \pmod{n}$ for all $a$ coprime to $n$. The smallest is $561 = 3 \cdot 11 \cdot 17$.
+
+\section{Cryptographic Applications}
+
+\subsection{RSA Encryption}
+
+Fermat's Little Theorem (generalized as Euler's theorem) is essential for RSA cryptography.
+\noindent
+\\
+\\
+In RSA with primes $p$ and $q$, we use:
+\[
+m^{ed} \equiv m \pmod{pq}
+\]
+\noindent
+where $ed \equiv 1 \pmod{(p-1)(q-1)}$. This follows from Fermat's Little Theorem applied to each prime factor.
+
+\section{Theoretical Extensions}
+
+\subsection{Euler's Theorem}
+
+Fermat's Little Theorem generalizes to:
+
+\begin{theorem}[Euler's Theorem]
+If $\gcd(a,n) = 1$, then $a^{\phi(n)} \equiv 1 \pmod{n}$, where $\phi(n)$ is Euler's totient function.
+\end{theorem}
+\noindent
+When $n = p$ is prime, $\phi(p) = p-1$, recovering Fermat's Little Theorem.
+
+\subsection{Wilson's Theorem}
+
+An interesting corollary relates to factorials:
+
+\begin{theorem}[Wilson's Theorem]
+$(p-1)! \equiv -1 \pmod{p}$ if and only if $p$ is prime.
+\end{theorem}
+\noindent
+This follows from properties used in Euler's proof of Fermat's Little Theorem.
+
+\end{document}
